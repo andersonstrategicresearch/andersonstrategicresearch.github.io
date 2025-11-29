@@ -138,56 +138,47 @@
     
     <script>
       const SUBSTACK_USERNAME = 'asrinsights';
-      const RSS_URL = `https://${SUBSTACK_USERNAME}.substack.com/feed`;
+      const RSS_URL = `https://www.toptal.com/developers/feed2json/convert?url=https://${SUBSTACK_USERNAME}.substack.com/feed`;
       
       async function loadArticles() {
         const articlesDiv = document.getElementById('articles');
         
         try {
           const response = await fetch(RSS_URL);
-          const text = await response.text();
+          const data = await response.json();
           
-          const parser = new DOMParser();
-          const xml = parser.parseFromString(text, 'text/xml');
-          
-          const items = xml.querySelectorAll('item');
-          
-          if (items.length === 0) {
+          if (!data.items || data.items.length === 0) {
             articlesDiv.innerHTML = '<p class="error">No articles found.</p>';
             return;
           }
           
           articlesDiv.innerHTML = '';
           
-          items.forEach(item => {
-            const title = item.querySelector('title')?.textContent || 'Untitled';
-            const link = item.querySelector('link')?.textContent || '#';
-            const pubDate = item.querySelector('pubDate')?.textContent;
-            const description = item.querySelector('description')?.textContent || '';
-            
+          data.items.forEach(item => {
             const article = document.createElement('div');
             article.className = 'article';
             
-            const date = pubDate ? new Date(pubDate) : null;
-            const formattedDate = date 
-              ? date.toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })
-              : '';
+            const date = new Date(item.date_published);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            });
             
-            // Strip HTML and truncate description
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = description;
-            const cleanDescription = tempDiv.textContent || tempDiv.innerText || '';
-            const truncatedDescription = cleanDescription.length > 300 
-              ? cleanDescription.substring(0, 300) + '...' 
-              : cleanDescription;
+            // Use summary if available, otherwise strip HTML from content
+            let description = item.summary || '';
+            if (!description && item.content_html) {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = item.content_html;
+              description = tempDiv.textContent || tempDiv.innerText || '';
+            }
+            const truncatedDescription = description.length > 300 
+              ? description.substring(0, 300) + '...' 
+              : description;
             
             article.innerHTML = `
-              <h2><a href="${link}" target="_blank">${title}</a></h2>
-              ${formattedDate ? `<div class="date">${formattedDate}</div>` : ''}
+              <h2><a href="${item.url}" target="_blank">${item.title}</a></h2>
+              <div class="date">${formattedDate}</div>
               <div class="description">${truncatedDescription}</div>
             `;
             
