@@ -19,8 +19,17 @@ jobs:
 
       - name: Fetch and convert RSS to JSON
         run: |
-          curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
+          # Fetch with full headers
+          curl -sL \
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+            -H "Accept: application/rss+xml, application/xml, text/xml" \
             "https://asrinsights.substack.com/feed" -o feed.xml
+          
+          # Debug: show first 500 chars
+          echo "=== First 500 chars of response ==="
+          head -c 500 feed.xml
+          echo ""
+          echo "==================================="
           
           # Check if we got content
           if [ ! -s feed.xml ]; then
@@ -28,27 +37,25 @@ jobs:
             exit 1
           fi
           
+          pip install feedparser --quiet
+          
           python3 << 'EOF'
-          import xml.etree.ElementTree as ET
+          import feedparser
           import json
 
-          with open('feed.xml', 'r') as f:
-              xml_content = f.read()
+          feed = feedparser.parse('feed.xml')
 
-          root = ET.fromstring(xml_content)
+          if feed.bozo and not feed.entries:
+              print(f"Parse error: {feed.bozo_exception}")
+              exit(1)
 
           items = []
-          for item in root.findall('.//item'):
-              title = item.find('title')
-              link = item.find('link')
-              pub_date = item.find('pubDate')
-              description = item.find('description')
-              
+          for entry in feed.entries:
               items.append({
-                  'title': title.text if title is not None else '',
-                  'link': link.text if link is not None else '',
-                  'pubDate': pub_date.text if pub_date is not None else '',
-                  'description': description.text if description is not None else ''
+                  'title': entry.get('title', ''),
+                  'link': entry.get('link', ''),
+                  'pubDate': entry.get('published', ''),
+                  'description': entry.get('summary', '')
               })
 
           with open('articles.json', 'w') as f:
