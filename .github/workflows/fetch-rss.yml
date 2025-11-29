@@ -2,7 +2,7 @@ name: Fetch Substack RSS
 
 on:
   schedule:
-    # Runs every 15 minutes
+    # Runs daily at 9am UTC
     - cron: '0 9 * * *'
   push:
     branches:
@@ -19,14 +19,22 @@ jobs:
 
       - name: Fetch and convert RSS to JSON
         run: |
-          curl -s "https://asrinsights.substack.com/feed" | \
-          python3 << 'EOF' > articles.json
-          import sys
+          curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
+            "https://asrinsights.substack.com/feed" -o feed.xml
+          
+          # Check if we got content
+          if [ ! -s feed.xml ]; then
+            echo "Error: Empty response from Substack"
+            exit 1
+          fi
+          
+          python3 << 'EOF'
           import xml.etree.ElementTree as ET
           import json
-          import html
 
-          xml_content = sys.stdin.read()
+          with open('feed.xml', 'r') as f:
+              xml_content = f.read()
+
           root = ET.fromstring(xml_content)
 
           items = []
@@ -43,8 +51,13 @@ jobs:
                   'description': description.text if description is not None else ''
               })
 
-          print(json.dumps({'items': items}, indent=2))
+          with open('articles.json', 'w') as f:
+              json.dump({'items': items}, f, indent=2)
+          
+          print(f"Successfully parsed {len(items)} articles")
           EOF
+          
+          rm feed.xml
 
       - name: Commit and push if changed
         run: |
