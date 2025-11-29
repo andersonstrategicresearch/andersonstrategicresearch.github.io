@@ -137,14 +137,11 @@
     </div>
     
     <script>
-      const SUBSTACK_USERNAME = 'asrinsights';
-      const RSS_URL = `https://www.toptal.com/developers/feed2json/convert?url=https://${SUBSTACK_USERNAME}.substack.com/feed`;
-      
       async function loadArticles() {
         const articlesDiv = document.getElementById('articles');
         
         try {
-          const response = await fetch(RSS_URL);
+          const response = await fetch('/articles.json');
           const data = await response.json();
           
           if (!data.items || data.items.length === 0) {
@@ -158,26 +155,23 @@
             const article = document.createElement('div');
             article.className = 'article';
             
-            const date = new Date(item.date_published);
+            const date = new Date(item.pubDate);
             const formattedDate = date.toLocaleDateString('en-US', { 
               year: 'numeric', 
               month: 'long', 
               day: 'numeric' 
             });
             
-            // Use summary if available, otherwise strip HTML from content
-            let description = item.summary || '';
-            if (!description && item.content_html) {
-              const tempDiv = document.createElement('div');
-              tempDiv.innerHTML = item.content_html;
-              description = tempDiv.textContent || tempDiv.innerText || '';
-            }
+            // Remove HTML tags from description and limit length
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = item.description;
+            const description = tempDiv.textContent || tempDiv.innerText || '';
             const truncatedDescription = description.length > 300 
               ? description.substring(0, 300) + '...' 
               : description;
             
             article.innerHTML = `
-              <h2><a href="${item.url}" target="_blank">${item.title}</a></h2>
+              <h2><a href="${item.link}" target="_blank">${item.title}</a></h2>
               <div class="date">${formattedDate}</div>
               <div class="description">${truncatedDescription}</div>
             `;

@@ -1,0 +1,55 @@
+name: Fetch Substack RSS
+
+on:
+  schedule:
+    # Runs every 15 minutes
+    - cron: '*/15 * * * *'
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  fetch-rss:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch and convert RSS to JSON
+        run: |
+          curl -s "https://asrinsights.substack.com/feed" | \
+          python3 << 'EOF' > articles.json
+          import sys
+          import xml.etree.ElementTree as ET
+          import json
+          import html
+
+          xml_content = sys.stdin.read()
+          root = ET.fromstring(xml_content)
+
+          items = []
+          for item in root.findall('.//item'):
+              title = item.find('title')
+              link = item.find('link')
+              pub_date = item.find('pubDate')
+              description = item.find('description')
+              
+              items.append({
+                  'title': title.text if title is not None else '',
+                  'link': link.text if link is not None else '',
+                  'pubDate': pub_date.text if pub_date is not None else '',
+                  'description': description.text if description is not None else ''
+              })
+
+          print(json.dumps({'items': items}, indent=2))
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add articles.json
+          git diff --quiet --cached || git commit -m "Update articles.json"
+          git push
