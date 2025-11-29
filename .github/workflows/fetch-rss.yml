@@ -17,54 +17,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch and convert RSS to JSON
+      - name: Fetch RSS via Toptal feed2json
         run: |
-          # Fetch with full headers
-          curl -sL \
-            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
-            -H "Accept: application/rss+xml, application/xml, text/xml" \
-            "https://asrinsights.substack.com/feed" -o feed.xml
+          curl -s "https://www.toptal.com/developers/feed2json/convert?url=https://asrinsights.substack.com/feed" -o response.json
           
-          # Debug: show first 500 chars
-          echo "=== First 500 chars of response ==="
-          head -c 500 feed.xml
-          echo ""
-          echo "==================================="
-          
-          # Check if we got content
-          if [ ! -s feed.xml ]; then
-            echo "Error: Empty response from Substack"
+          # Check if we got valid JSON with items
+          if ! jq -e '.items' response.json > /dev/null 2>&1; then
+            echo "Error: Invalid response from feed2json"
+            cat response.json
             exit 1
           fi
           
-          pip install feedparser --quiet
+          # Convert Toptal format to our format
+          jq '{items: [.items[] | {title: .title, link: .url, pubDate: .date_published, description: .summary}]}' response.json > articles.json
           
-          python3 << 'EOF'
-          import feedparser
-          import json
-
-          feed = feedparser.parse('feed.xml')
-
-          if feed.bozo and not feed.entries:
-              print(f"Parse error: {feed.bozo_exception}")
-              exit(1)
-
-          items = []
-          for entry in feed.entries:
-              items.append({
-                  'title': entry.get('title', ''),
-                  'link': entry.get('link', ''),
-                  'pubDate': entry.get('published', ''),
-                  'description': entry.get('summary', '')
-              })
-
-          with open('articles.json', 'w') as f:
-              json.dump({'items': items}, f, indent=2)
-          
-          print(f"Successfully parsed {len(items)} articles")
-          EOF
-          
-          rm feed.xml
+          echo "Successfully fetched $(jq '.items | length' articles.json) articles"
+          rm response.json
 
       - name: Commit and push if changed
         run: |
