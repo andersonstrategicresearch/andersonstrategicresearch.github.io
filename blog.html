@@ -139,7 +139,7 @@
     <script>
       // Replace YOUR_SUBSTACK_USERNAME with your actual Substack username
       const SUBSTACK_USERNAME = 'asrinsights';
-      const RSS_URL = `https://api.rss2json.com/v1/api.json?rss_url=https://${SUBSTACK_USERNAME}.substack.com/feed`;
+      const RSS_URL = `https://api.rss2json.com/v1/api.json?rss_url=https://${SUBSTACK_USERNAME}.substack.com/feed&_=${Date.now()}`;
       
       async function loadArticles() {
         const articlesDiv = document.getElementById('articles');
