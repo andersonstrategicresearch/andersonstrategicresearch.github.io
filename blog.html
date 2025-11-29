@@ -137,50 +137,57 @@
     </div>
     
     <script>
-      // Replace YOUR_SUBSTACK_USERNAME with your actual Substack username
       const SUBSTACK_USERNAME = 'asrinsights';
-      const RSS_URL = `https://api.rss2json.com/v1/api.json?rss_url=https://${SUBSTACK_USERNAME}.substack.com/feed&_=${Date.now()}`;
+      const RSS_URL = `https://${SUBSTACK_USERNAME}.substack.com/feed`;
       
       async function loadArticles() {
         const articlesDiv = document.getElementById('articles');
         
         try {
           const response = await fetch(RSS_URL);
-          const data = await response.json();
+          const text = await response.text();
           
-          if (data.status !== 'ok') {
-            throw new Error('Failed to fetch RSS feed');
-          }
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(text, 'text/xml');
           
-          if (!data.items || data.items.length === 0) {
+          const items = xml.querySelectorAll('item');
+          
+          if (items.length === 0) {
             articlesDiv.innerHTML = '<p class="error">No articles found.</p>';
             return;
           }
           
           articlesDiv.innerHTML = '';
           
-          data.items.forEach(item => {
+          items.forEach(item => {
+            const title = item.querySelector('title')?.textContent || 'Untitled';
+            const link = item.querySelector('link')?.textContent || '#';
+            const pubDate = item.querySelector('pubDate')?.textContent;
+            const description = item.querySelector('description')?.textContent || '';
+            
             const article = document.createElement('div');
             article.className = 'article';
             
-            const date = new Date(item.pubDate);
-            const formattedDate = date.toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            });
+            const date = pubDate ? new Date(pubDate) : null;
+            const formattedDate = date 
+              ? date.toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })
+              : '';
             
-            // Remove HTML tags from description and limit length
+            // Strip HTML and truncate description
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = item.description;
-            const description = tempDiv.textContent || tempDiv.innerText || '';
-            const truncatedDescription = description.length > 300 
-              ? description.substring(0, 300) + '...' 
-              : description;
+            tempDiv.innerHTML = description;
+            const cleanDescription = tempDiv.textContent || tempDiv.innerText || '';
+            const truncatedDescription = cleanDescription.length > 300 
+              ? cleanDescription.substring(0, 300) + '...' 
+              : cleanDescription;
             
             article.innerHTML = `
-              <h2><a href="${item.link}" target="_blank">${item.title}</a></h2>
-              <div class="date">${formattedDate}</div>
+              <h2><a href="${link}" target="_blank">${title}</a></h2>
+              ${formattedDate ? `<div class="date">${formattedDate}</div>` : ''}
               <div class="description">${truncatedDescription}</div>
             `;
             
@@ -191,7 +198,7 @@
           console.error('Error loading articles:', error);
           articlesDiv.innerHTML = `
             <p class="error">
-              Unable to load articles. Please check that your Substack username is correct.
+              Unable to load articles.
             </p>
           `;
         }
