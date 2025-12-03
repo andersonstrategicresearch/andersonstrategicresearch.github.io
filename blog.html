@@ -150,6 +150,8 @@
           }
           
           articlesDiv.innerHTML = '';
+
+          data.items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
           
           data.items.forEach(item => {
             const article = document.createElement('div');
