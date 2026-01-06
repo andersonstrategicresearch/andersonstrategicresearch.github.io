@@ -17,7 +17,7 @@
       
       /* HEADER / LOGO SECTION */
       header {
-        padding: 3rem 2rem 0.5rem;
+        padding: 2.5rem 2rem 0.25rem;
         text-align: center;
       }
       
@@ -30,7 +30,7 @@
       /* HERO SECTION */
       .hero {
         text-align: center;
-        padding: 2rem 2rem;
+        padding: 1.5rem 2rem 3rem;
         max-width: 800px;
         margin: 0 auto;
       }
@@ -89,33 +89,107 @@
         margin-bottom: 1.5rem;
         color: #3a3428;
         font-size: 1.05rem;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
       }
       
       .text-section p:last-child {
         margin-bottom: 0;
       }
       
+      /* TABLE STYLING */
+      table {
+        width: 100%;
+        margin-top: 2.5rem;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+      }
+      
+      table thead tr {
+        border-bottom: 2px solid #d0c9b8;
+      }
+      
+      table th {
+        text-align: left;
+        padding: 1rem 0.5rem;
+        font-weight: normal;
+        color: #5a5446;
+      }
+      
+      table tbody tr {
+        border-bottom: 1px solid #e5dfd0;
+      }
+      
+      table tbody tr:last-child {
+        border-bottom: none;
+      }
+      
+      table td {
+        padding: 1rem 0.5rem;
+      }
+      
+      table td:first-child {
+        color: #5a5446;
+      }
+      
+      table td:not(:first-child) {
+        color: #3a3428;
+      }
+      
       /* CONTACT SECTION */
       .contact {
         text-align: center;
         padding: 4rem 2rem 5rem;
+        max-width: 900px;
+        margin: 0 auto;
       }
       
-      .contact p {
-        font-size: 1.1rem;
-        margin-bottom: 1.5rem;
+      .contact-container {
+        display: flex;
+        gap: 4rem;
+        justify-content: center;
+        align-items: flex-start;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .contact-primary,
+      .contact-alternatives {
+        flex: 1;
+        min-width: 250px;
+      }
+      
+      .contact-primary {
+        text-align: center;
+        padding-right: 2rem;
+        border-right: 1px solid #d0c9b8;
+      }
+      
+      .contact-alternatives {
+        text-align: center;
+        padding-left: 2rem;
+      }
+      
+      .contact-primary p,
+      .contact-alternatives p {
+        font-size: 1.05rem;
+        margin-bottom: 1.25rem;
         color: #3a3428;
       }
       
-      .contact a {
+      .contact-primary a,
+      .contact-alternatives a {
         color: #5a5446;
         text-decoration: none;
         border-bottom: 1px solid #5a5446;
         transition: color 0.3s ease, border-color 0.3s ease;
         font-size: 1.05rem;
+        padding-bottom: 2px;
       }
       
-      .contact a:hover {
+      .contact-primary a:hover,
+      .contact-alternatives a:hover {
         color: #2a2418;
         border-color: #2a2418;
       }
@@ -131,7 +205,7 @@
       /* RESPONSIVE */
       @media (max-width: 768px) {
         header {
-          padding: 2rem 1rem 1.5rem;
+          padding: 2rem 1rem 0.5rem;
         }
         
         header img {
@@ -139,7 +213,7 @@
         }
         
         .hero {
-          padding: 2rem 1.5rem;
+          padding: 1rem 1.5rem 2rem;
         }
         
         .hero h1 {
@@ -163,8 +237,35 @@
           font-size: 1rem;
         }
         
+        table {
+          font-size: 0.85rem;
+        }
+        
+        table th,
+        table td {
+          padding: 0.6rem 0.3rem;
+        }
+        
         .contact {
           padding: 3rem 1.5rem 4rem;
+        }
+        
+        .contact-container {
+          flex-direction: column;
+          gap: 2.5rem;
+          align-items: center;
+        }
+        
+        .contact-primary {
+          padding-right: 0;
+          border-right: none;
+          padding-bottom: 2.5rem;
+          border-bottom: 1px solid #d0c9b8;
+        }
+        
+        .contact-alternatives {
+          padding-left: 0;
+          padding-top: 0;
         }
       }
     </style>
@@ -215,29 +316,29 @@
       
       <p>We close the loop between strategy and execution. No handoffs, no translations—just direct accountability.</p>
       
-      <table style="width: 100%; margin-top: 2rem; border-collapse: collapse; font-size: 0.95rem;">
+      <table>
         <thead>
-          <tr style="border-bottom: 2px solid #d0c9b8;">
-            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;"></th>
-            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;">Typical Consultants</th>
-            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;">ASR</th>
+          <tr>
+            <th></th>
+            <th>Typical Consultants</th>
+            <th>ASR</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom: 1px solid #e5dfd0;">
-            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Focus</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Billing hours & slide decks</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Delivering measurable outcomes</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #e5dfd0;">
-            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Technology</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Pushing specific SaaS partners</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Tool-agnostic problem solving</td>
+          <tr>
+            <td>Focus</td>
+            <td>Billing hours & slide decks</td>
+            <td>Delivering measurable outcomes</td>
           </tr>
           <tr>
-            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Environment</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Standard enterprise</td>
-            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Regulated & high-consequence</td>
+            <td>Technology</td>
+            <td>Pushing specific SaaS partners</td>
+            <td>Tool-agnostic problem solving</td>
+          </tr>
+          <tr>
+            <td>Environment</td>
+            <td>Standard enterprise</td>
+            <td>Regulated & high-consequence</td>
           </tr>
         </tbody>
       </table>
@@ -266,17 +367,15 @@
     
     <!-- CONTACT -->
     <section class="contact">
-      <p>If this resonates, let's talk.</p>
-      <a href="mailto:contact@andersonsr.com">contact@andersonsr.com</a>
-      
-      <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid #d0c9b8;">
-        <p style="font-size: 1rem; color: #5a5446; margin-bottom: 1rem;">Or start with a lower commitment:</p>
-        <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
-          <!-- Replace # with actual calendar link (e.g., Calendly) -->
-          <a href="https://calendar.app.google/qR1Un9aHGfKeTwoeA" style="color: #5a5446; text-decoration: none; border-bottom: 1px solid #5a5446; font-size: 1rem;">Book a 15-min Strategy Call</a>
-          
-          <!-- Replace # with actual download link or lead magnet -->
-          <!-- <a href="#" style="color: #5a5446; text-decoration: none; border-bottom: 1px solid #5a5446; font-size: 1rem;">Download: AI Deployment Framework</a>-->
+      <div class="contact-container">
+        <div class="contact-primary">
+          <p>If this resonates, let's talk.</p>
+          <a href="mailto:contact@andersonsr.com">contact@andersonsr.com</a>
+        </div>
+        
+        <div class="contact-alternatives">
+          <p>Or start with a lower commitment:</p>
+          <a href="https://calendar.app.google/qR1Un9aHGfKeTwoeA">Book a 15-min Strategy Call</a>
         </div>
       </div>
     </section>
