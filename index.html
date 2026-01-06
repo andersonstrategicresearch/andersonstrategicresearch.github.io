@@ -10,84 +10,273 @@
         padding: 0;
         background: #eeeade;
         min-height: 100vh;
-        display: flex;
-        flex-direction: column;
         font-family: "Georgia", "Times New Roman", serif;
+        color: #2a2418;
+        line-height: 1.6;
       }
       
-      nav {
-        padding: 1.5rem 2rem;
+      /* HEADER / LOGO SECTION */
+      header {
+        padding: 3rem 2rem 2rem;
         text-align: center;
       }
       
-      nav a {
-        margin-left: 2rem;
-        color: #5a5446;
-        text-decoration: none;
-        font-size: 0.95rem;
-        letter-spacing: 0.5px;
-        transition: color 0.3s ease;
+      header img {
+        max-width: 18vw;
+        height: auto;
+        min-width: 180px;
       }
       
-      nav a:hover {
+      /* HERO SECTION */
+      .hero {
+        text-align: center;
+        padding: 3rem 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+        font-weight: normal;
+        margin: 0 0 1.5rem 0;
+        color: #2a2418;
+        letter-spacing: -0.5px;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+        color: #5a5446;
+        margin: 0;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      
+      /* SECTION CONTAINERS */
+      section {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+      }
+      
+      section h2 {
+        font-size: 1.3rem;
+        font-weight: normal;
+        margin: 0 0 1.5rem 0;
         color: #2a2418;
       }
       
-      .main-content {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      /* WHAT WE DO */
+      .what-we-do ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
       }
       
-      .container {
+      .what-we-do li {
+        margin-bottom: 1rem;
+        color: #3a3428;
+        font-size: 1.05rem;
+      }
+      
+      .what-we-do li::before {
+        content: "—";
+        margin-right: 0.75rem;
+        color: #5a5446;
+      }
+      
+      /* DIFFERENTIATION & OTHER TEXT SECTIONS */
+      .text-section p {
+        margin-bottom: 1.5rem;
+        color: #3a3428;
+        font-size: 1.05rem;
+      }
+      
+      .text-section p:last-child {
+        margin-bottom: 0;
+      }
+      
+      /* CONTACT SECTION */
+      .contact {
         text-align: center;
-        max-width: 90vw;
+        padding: 4rem 2rem 5rem;
       }
       
-      img {
-        max-width: 20vw;
-        height: auto;
+      .contact p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: #3a3428;
       }
       
-      h1 {
-        font-size: 1.8rem;
-        margin-top: 1rem;
-        font-weight: normal;
+      .contact a {
+        color: #5a5446;
+        text-decoration: none;
+        border-bottom: 1px solid #5a5446;
+        transition: color 0.3s ease, border-color 0.3s ease;
+        font-size: 1.05rem;
       }
       
-      @media (max-width: 600px) {
-        nav {
-          padding: 1rem;
+      .contact a:hover {
+        color: #2a2418;
+        border-color: #2a2418;
+      }
+      
+      /* DIVIDER */
+      .divider {
+        max-width: 600px;
+        margin: 0 auto;
+        height: 1px;
+        background: #d0c9b8;
+      }
+      
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        header {
+          padding: 2rem 1rem 1.5rem;
         }
         
-        nav a {
-          margin-left: 1.5rem;
-          font-size: 0.9rem;
+        header img {
+          max-width: 40vw;
         }
         
-        img {
-          max-width: 33vw;
+        .hero {
+          padding: 2rem 1.5rem;
         }
         
-        h1 {
-          font-size: 1.4rem;
+        .hero h1 {
+          font-size: 1.6rem;
+        }
+        
+        .hero p {
+          font-size: 1rem;
+        }
+        
+        section {
+          padding: 2.5rem 1.5rem;
+        }
+        
+        section h2 {
+          font-size: 1.2rem;
+        }
+        
+        .what-we-do li,
+        .text-section p {
+          font-size: 1rem;
+        }
+        
+        .contact {
+          padding: 3rem 1.5rem 4rem;
         }
       }
     </style>
   </head>
   <body>
-    <nav>
-      <a href="blog.html">blog</a>
-      <a href="labs.html">labs</a>
-      <span style="color: #5a5446; font-size: 0.95rem; letter-spacing: 0.5px; margin-left: 2rem;">contact[at]andersonsr.com</span>
-    </nav>
+    <!-- LOGO -->
+    <header>
+      <img src="asr_logo_beige.jpeg" alt="Anderson Strategic Research" />
+    </header>
     
-    <div class="main-content">
-      <div class="container">
-        <img src="asr_logo_beige.jpeg" alt="ASR Logo" />
-        <!--<h1>Anderson Strategic Research</h1>-->
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <h1>Execution for high-stakes environments</h1>
+      <p>We help you deploy complex systems without the institutional risk.</p>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- WHAT WE DO -->
+    <section class="what-we-do">
+      <h2>What We Do</h2>
+      <ul>
+        <li>Decision Intelligence: Clarifying "Should we?" before "How do we?"</li>
+        <li>Resilient Systems: Designing for real-world constraints, not lab conditions</li>
+        <li>Outcome-Bound Execution: Deploying AI where it creates measurable advantage</li>
+        <li>Risk Mitigation: Enabling progress without creating institutional exposure</li>
+      </ul>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- WHO THIS IS FOR -->
+    <section class="text-section">
+      <h2>Who This Is For</h2>
+      <p>CTOs in regulated industries navigating compliance while staying competitive. Founders scaling into federal markets who need more than just technical execution. Campaign strategists making real-time decisions where data infrastructure determines outcomes. Organizations in rapid growth or crisis response where normal timelines don't apply.</p>
+      
+      <p>If you're deciding whether to build, buy, or wait—and the wrong choice creates institutional risk, mission failure, or public consequence—this is the conversation we're built for.</p>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- DIFFERENTIATION -->
+    <section class="text-section">
+      <h2>How ASR Is Different</h2>
+      <p>We're tool-agnostic. AI, automation, and agents are capabilities—not our identity. We choose solutions based on outcomes, not trends.</p>
+      
+      <p>We've operated in regulated, security-constrained, and high-consequence environments. We understand what it means to build under scrutiny.</p>
+      
+      <p>We close the loop between strategy and execution. No handoffs, no translations—just direct accountability.</p>
+      
+      <table style="width: 100%; margin-top: 2rem; border-collapse: collapse; font-size: 0.95rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid #d0c9b8;">
+            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;"></th>
+            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;">Typical Consultants</th>
+            <th style="text-align: left; padding: 0.75rem 0.5rem; font-weight: normal; color: #5a5446;">ASR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5dfd0;">
+            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Focus</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Billing hours & slide decks</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Delivering measurable outcomes</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5dfd0;">
+            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Technology</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Pushing specific SaaS partners</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Tool-agnostic problem solving</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.75rem 0.5rem; color: #5a5446;">Environment</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Standard enterprise</td>
+            <td style="padding: 0.75rem 0.5rem; color: #3a3428;">Regulated & high-consequence</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- HOW WE WORK -->
+    <section class="text-section">
+      <h2>How We Work</h2>
+      <p>We structure engagements around outcomes, not hours. This means fixed-scope projects when the problem is well-defined, retainers when ongoing judgment matters, and outcome-bound work when success is measurable.</p>
+      
+      <p>Our engagements are deliberate, not transactional. If we take on a project, we see it through.</p>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- CREDIBILITY SIGNAL -->
+    <section class="text-section">
+      <p>ASR brings senior-level experience from government, defense, and intelligence contexts, as well as political campaigns, humanitarian crisis response, and high-growth organizations under pressure. We've operated in environments where decisions carry weight, timelines are compressed, and room for error is narrow. We're comfortable where regulation, security requirements, public scrutiny, and institutional complexity are the baseline, not the exception.</p>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <!-- CONTACT -->
+    <section class="contact">
+      <p>If this resonates, let's talk.</p>
+      <a href="mailto:contact@andersonsr.com">contact@andersonsr.com</a>
+      
+      <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid #d0c9b8;">
+        <p style="font-size: 1rem; color: #5a5446; margin-bottom: 1rem;">Or start with a lower commitment:</p>
+        <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+          <!-- Replace # with actual calendar link (e.g., Calendly) -->
+          <a href="#" style="color: #5a5446; text-decoration: none; border-bottom: 1px solid #5a5446; font-size: 1rem;">Book a 15-min Strategy Call</a>
+          
+          <!-- Replace # with actual download link or lead magnet -->
+          <a href="#" style="color: #5a5446; text-decoration: none; border-bottom: 1px solid #5a5446; font-size: 1rem;">Download: AI Deployment Framework</a>
+        </div>
       </div>
-    </div>
+    </section>
   </body>
 </html>
